@@ -1,9 +1,8 @@
 #include "main.h"
-
 /**
-* _printf - a print function. works just like stdio print
-* @format: strings and format characters to print
-* Return: count of characters printed
+* _printf - main function to print in console
+* @format: array to print and check type
+* Return: count of character printed
 **/
 int _printf(const char *format, ...)
 {
@@ -12,12 +11,14 @@ int _printf(const char *format, ...)
 	if (format != NULL)
 	{
 		int i;
-		va_list inputs;
-		int (*printer)(va_list);
+		va_list ar_list;
+		int (*o)(va_list);
 
-		va_start(inputs, format);
+		va_start(ar_list, format);
+
 		if (format[0] == '%' && format[1] == '\0')
 			return (-1);
+
 		count = 0;
 
 		for (i = 0; format[i] != '\0'; i++)
@@ -31,19 +32,15 @@ int _printf(const char *format, ...)
 				}
 				else if (format[i + 1] != '\0')
 				{
-					printer = get_func(format[i + 1]);
-					if (printer)
-						count += printer(inputs);
-					else
-						count += _putchar(format[i]);
-						count += _putchar(format[i + 1]);
+					o = get_func(format[i + 1]);
+					count += (o ? o(ar_list) : _putchar(format[i]) + _putchar(format[i + 1]));
 					i++;
 				}
 			}
 			else
 				count += _putchar(format[i]);
 		}
-		va_end(inputs);
+		va_end(ar_list);
 	}
 
 	return (count);
