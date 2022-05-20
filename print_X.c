@@ -4,7 +4,7 @@
 /**
  * print_X - A function that prints an ascii character value
  * in uppercase hexadecimal
- * @X: char to print
+ * @ar_list: char to print
  * Return: number of printed characters
  */
 int print_X(va_list ar_list)

@@ -2,7 +2,7 @@
 
 /**
  * print_o - prints an unsigned int in octal notation
- * @o: unsigned int to print
+ * @ar_list: unsigned int to print
  * Return: counter - number of printed characters
  */
 int print_o(va_list ar_list)
