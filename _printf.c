@@ -1,4 +1,5 @@
 #include "main.h"
+
 /**
 * _printf - a print function. works just like stdio print
 * @format: strings and format characters to print
@@ -6,45 +7,42 @@
 **/
 int _printf(const char *format, ...)
 {
-	va_list inputs;
-	int (*printer)(va_list);
-	unsigned int i = 0, counter = 0;
+	int count = -1;
 
-	if (format == NULL)
-		return (-1);
-
-	va_start(inputs, format);
-
-	while (format[i])
+	if (format != NULL)
 	{
-		if (format[i] != '%')
+		int i;
+		va_list inputs;
+		int (*printer)(va_list);
+
+		va_start(inputs, format);
+
+		if (format[0] == '%' && format[1] == '\0')
+			return (-1);
+
+		count = 0;
+
+		for (i = 0; format[i] != '\0'; i++)
 		{
-			_putchar(format[i]);
-			counter++;
-			i++;
-			continue;
-		}
-		else
-		{
-			if (format[i + 1] == '%')
+			if (format[i] == '%')
 			{
-				_putchar('%');
-				counter++;
-				i += 2;
-				continue;
+				if (format[i + 1] == '%')
+				{
+					count += _putchar(format[i]);
+					i++;
+				}
+				else if (format[i + 1] != '\0')
+				{
+					printer = get_func(format[i + 1]);
+					count += (printer ? printer(inputs) : _putchar(format[i]) + _putchar(format[i + 1]));
+					i++;
+				}
 			}
 			else
-			{
-				printer = get_func(format[i + 1]);
-				if (printer == NULL)
-					return (-1);
-				i += 2;
-				counter += printer(inputs);
-				continue;
-			}
+				count += _putchar(format[i]);
 		}
-		i++;
+		va_end(inputs);
 	}
-	va_end(inputs);
-	return (counter);
+
+	return (count);
 }
