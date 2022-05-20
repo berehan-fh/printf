@@ -16,10 +16,8 @@ int _printf(const char *format, ...)
 		int (*printer)(va_list);
 
 		va_start(inputs, format);
-
 		if (format[0] == '%' && format[1] == '\0')
 			return (-1);
-
 		count = 0;
 
 		for (i = 0; format[i] != '\0'; i++)
@@ -34,7 +32,11 @@ int _printf(const char *format, ...)
 				else if (format[i + 1] != '\0')
 				{
 					printer = get_func(format[i + 1]);
-					count += (printer ? printer(inputs) : _putchar(format[i]) + _putchar(format[i + 1]));
+					if (printer)
+						count += printer(inputs);
+					else
+						count += _putchar(format[i]);
+						count += _putchar(format[i + 1]);
 					i++;
 				}
 			}
